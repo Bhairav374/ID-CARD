@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICard</title>
+    <link rel="stylesheet" href="Icard.css">
+    <style>
+        *{
+    text-decoration: none;  
+  }
+  .mainbox{
+      position: relative;
+      height: 75vh;
+      width: 45vh;
+      perspective: 1000px;
+  }
+  .thecard{
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      padding-top: 20px;
+      text-align: center;
+      border: 20px solid rgb(134, 133, 133);
+      border-radius: 15px;
+      transform-style: preserve-3d;
+      transition: all 0.5s ease;
+      z-index: 1;
+  }
+  .thecard.flipped {
+      transform: rotateY(180deg);
+  }
+  .thefront, .theback {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      backface-visibility: hidden;
+  }
+  .theback {
+      transform: rotateY(180deg);
+  }
+  .heading {
+      margin: 0px;
+  }
+  .name {
+      margin-bottom: 0px;
+  }
+  .table {
+      text-align: left;
+      text-decoration: none;
+      margin-top: 50px;
+      margin-left: 50px;
+  }
+  .name-back {
+      margin-top: 100px;
+      margin-bottom: 0;
+  }
+  button {
+      margin-top: 60px;
+  }
+    </style>  
+</head>
+<body>
+    <div class="mainbox">
+        <div class="thecard">
+            <div class="thefront">
+                <h1 class="name companyName-editable">Company Name</h1>
+                <h3 class="heading tagline-editable">Tagline</h3>
+                <p><img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="profile" width="100px" height="100px"></p>
+                <h2 class="name name-editable">Bhairav Kumar</h2>
+                <h3 class="heading heading-editable">Web Developer</h3>
+                <table class="table">
+                    <tr>
+                        <th>ID :</th>
+                        <td class="id-editable">AB-0000</td>
+                    </tr>
+                    <tr>
+                        <th>DOB :</th>
+                        <td class="dob-editable">DD/MM/YYYY</td>
+                    </tr>
+                    <tr>
+                        <th>PHONE :</th>
+                        <td class="phone-editable">+00 0000 0000</td>
+                    </tr>
+                    <tr>
+                        <th>E-Mail :</th>
+                        <td class="email-editable">Your Email Here</td>
+                    </tr>
+                </table>
+                <button class="edit-button" onclick="onEdit(this)">Edit</button>
+                <button class="save-button" style="display:none;" onclick="onSave(this)">Save</button>
+                <button onclick="onFlip()">Flip</button>
+            </div>
+            <div class="theback">
+                <h1 class="name-back companyNameBack-editable">Company Name</h1>
+                <h3 class="heading taglineBack-editable">Tagline</h3>
+                <p class="name">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis, illo.</p><br>
+                <p class="heading">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis, illo.</p>
+                <table class="table">
+                    <tr>
+                        <th>JOINED DATE :</th>
+                        <td class="joined-date-editable">MM/DD/YYYY</td>
+                    </tr>
+                    <tr>
+                        <th>EXPIRE DATE :</th>
+                        <td class="expire-date-editable">MM/DD/YYYY</td>
+                    </tr>
+                </table>
+                <button class="edit-button" onclick="onEdit(this)">Edit</button>
+                <button class="save-button" style="display:none;" onclick="onSave(this)">Save</button>
+                <button onclick="onFlip()">Flip</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function onFlip() {
+            const card = document.querySelector('.thecard');
+            card.classList.toggle('flipped');
+        }
+    
+        function onEdit(button) {
+            const card = button.closest('.thecard');
+            toggleEditMode(card, true);
+        }
+    
+        function onSave(button) {
+            const card = button.closest('.thecard');
+            toggleEditMode(card, false);
+        }
+    
+        function toggleEditMode(card, isEditMode) {
+            const fields = [
+                { selector: '.companyName-editable',type:'text'},
+                { selector: '.tagline-editable',type:'text'},
+                { selector: '.name-editable', type: 'text' },
+                { selector: '.heading-editable', type: 'text' },
+                { selector: '.id-editable', type: 'text' },
+                { selector: '.dob-editable', type: 'text' },
+                { selector: '.phone-editable', type: 'text' },
+                { selector: '.email-editable', type: 'text' },
+                { selector: '.companyNameBack-editable',type:'text'},
+                { selector: '.taglineBack-editable',type:'text'},
+                { selector: '.joined-date-editable', type: 'text' },
+                { selector: '.expire-date-editable', type: 'text' }
+            ];
+            fields.forEach(field => {
+                const element = card.querySelector(field.selector);
+                if (isEditMode) {
+                    const input = document.createElement('input');
+                    input.type = field.type;
+                    input.value = element.textContent.trim();
+                    element.textContent = '';
+                    element.appendChild(input);
+                } else {
+                    const input = element.querySelector('input');
+                    element.textContent = input.value;
+                }
+            });
+    
+            const editButtons = card.querySelectorAll('.edit-button');
+            const saveButtons = card.querySelectorAll('.save-button');
+            
+            editButtons.forEach(button => button.style.display = isEditMode ? 'none' : 'inline-block');
+            saveButtons.forEach(button => button.style.display = isEditMode ? 'inline-block' : 'none');
+        }
+    </script>
+</body>
+</html>
